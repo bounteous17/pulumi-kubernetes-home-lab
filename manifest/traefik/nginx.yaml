@@ -1,13 +1,15 @@
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: nginx
+  name: nginx-secure
 spec:
   entryPoints:
-    - web
+    - websecure
   routes:
     - match: Host(`nginx.home-lab.begoodguys.ovh`)
       kind: Rule
       services:
         - name: nginx
           port: 80
+  tls:
+    secretName: home-lab-nginx-cert-production
