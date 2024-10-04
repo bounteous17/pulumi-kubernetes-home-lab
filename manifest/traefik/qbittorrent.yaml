@@ -1,0 +1,15 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: qbittorrent-secure
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`qbittorrent.home-lab.begoodguys.ovh`)
+      kind: Rule
+      services:
+        - name: qbittorrent
+          port: 80
+  tls:
+    secretName: home-lab-qbittorrent-cert-production

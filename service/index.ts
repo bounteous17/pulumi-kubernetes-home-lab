@@ -1,7 +1,7 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as kubernetes from "@pulumi/kubernetes";
 
-const nginx = new kubernetes.core.v1.Service("nginx", {
+new kubernetes.core.v1.Service("nginx", {
   spec: {
     ports: [
       {
@@ -20,7 +20,3 @@ const nginx = new kubernetes.core.v1.Service("nginx", {
     },
   },
 });
-
-export default {
-    nginx
-}
