@@ -8,3 +8,10 @@ new k8s.helm.v3.Chart("qbittorrent", {
   },
 });
 
+new k8s.yaml.ConfigFile("qbittorrent-ingress", {
+  file: "helm-chart/qbittorrent/ingress.yaml",
+});
+
+new k8s.yaml.ConfigFile("qbittorrent-ssl-certificate", {
+  file: "helm-chart/qbittorrent/ssl-certificate.yaml",
+});

@@ -11,3 +11,6 @@ new k8s.helm.v3.Chart("cert-manager", {
   }
 });
 
+new k8s.yaml.ConfigFile("cert-manager-issuer", {
+  file: "helm-chart/cert-manager/issuer.yaml",
+});
