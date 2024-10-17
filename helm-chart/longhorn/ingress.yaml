@@ -1,15 +1,17 @@
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: longhorn-secure
+  name: longhorn-frontend
+  namespace: longhorn-system
 spec:
-  entryPoints:
-    - websecure
   routes:
-    - match: Host(`longhorn.home-lab.begoodguys.ovh`)
-      kind: Rule
+    - kind: Rule
+      match: Host(`longhorn.home-lab.begoodguys.ovh`)
+      middlewares:
+        - name: longhornauth
       services:
-        - name: longhorn-ui
+        - kind: Service
+          name: longhorn-frontend
           port: 80
   tls:
-    secretName: home-lab-longhorn-cert-production
+    secretName: tls-longhorn-http

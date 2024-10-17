@@ -1,0 +1,9 @@
+# Declaring the user list
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: longhornauth
+  namespace: longhorn-system
+spec:
+  basicAuth:
+    secret: longhorn-user-pass

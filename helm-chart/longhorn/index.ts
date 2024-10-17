@@ -1,7 +1,13 @@
 import * as k8s from "@pulumi/kubernetes";
+import * as pulumi from "@pulumi/pulumi";
 
-new k8s.helm.v3.Release("longhorn", {
+// const config = new pulumi.Config();
+// const longhronPassword = config.require("longhronPassword");
+// const longhronUsername = config.require("longhronUsername");
+
+const release = new k8s.helm.v3.Release("longhorn", {
   chart: "longhorn",
+  name: "longhorn",
   namespace: "longhorn-system",
   version: "1.7.1",
   createNamespace: true,
@@ -10,10 +16,18 @@ new k8s.helm.v3.Release("longhorn", {
   },
 });
 
-// new k8s.yaml.ConfigFile("longhorn-ingress", {
-//   file: "helm-chart/longhorn/ingress.yaml",
-// });
+const ingressAuthMiddleware = new k8s.yaml.ConfigFile(
+  "longhorn-ingress-auth-middleware",
+  {
+    file: "helm-chart/longhorn/ingress-middleware-auth.yaml",
+  },
+  { dependsOn: release }
+);
 
-// new k8s.yaml.ConfigFile("longhorn-ssl-certificate", {
-//   file: "helm-chart/longhorn/ssl-certificate.yaml",
-// });
+new k8s.yaml.ConfigFile(
+  "longhorn-ingress",
+  {
+    file: "helm-chart/longhorn/ingress.yaml",
+  },
+  { dependsOn: ingressAuthMiddleware }
+);
