@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jellyfin
+  namespace: jellyfin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jellyfin
+  template:
+    metadata:
+      labels:
+        app: jellyfin
+    spec:
+      nodeSelector:
+        kubernetes.io/arch: amd64
+      securityContext:
+        # runAsUser: 1000 # Similar to "user: 1000:1000" on Docker
+        # runAsGroup: 1000
+        supplementalGroups:
+          - 122 # Change this to match your "render" host group id and remove this comment
+      containers:
+        - name: jellyfin
+          image: jellyfin/jellyfin:2024101405
+          securityContext:
+            privileged: true
+          ports:
+            - containerPort: 8096
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /config
+              name: config
+            - mountPath: /media
+              name: data
+            - mountPath: /dev/dri/renderD128 # intel graphics GPU passthrough
+              name: render-device
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: jellyfin-config
+        - name: data
+          persistentVolumeClaim:
+            claimName: jellyfin-data
+        - name: render-device
+          hostPath:
+            path: /dev/dri/renderD128

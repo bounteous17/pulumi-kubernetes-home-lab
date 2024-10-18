@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
+    kubernetes.io/ingress.class: traefik
+  labels:
+    app: jellyfin
+  name: jellyfin
+  namespace: jellyfin
+spec:
+  rules:
+  - host: jellyfin.home-lab.begoodguys.ovh
+    http:
+      paths:
+      - backend:
+          service:
+            name: jellyfin
+            port: 
+              number: 8096
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - jellyfin.home-lab.begoodguys.ovh
+    secretName: tls-jellyfin-http
