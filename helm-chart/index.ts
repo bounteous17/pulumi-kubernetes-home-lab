@@ -1,4 +1,4 @@
 import './cert-manager'
-import './traefik'
 import './longhorn'
-// import './qbittorrent'
+import './jellyfin'
+import './qbittorrent'

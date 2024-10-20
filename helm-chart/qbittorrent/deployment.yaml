@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qbittorrent
+  namespace: jellyfin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qbittorrent
+  template:
+    metadata:
+      labels:
+        app: qbittorrent
+    spec:
+      containers:
+        - name: qbittorrent
+          image: linuxserver/qbittorrent:5.0.0
+          env:
+          - name: PUID
+            value: "1000"
+          - name: PGID
+            value: "1000"
+          - name: TZ
+            value: "Etc/UTC"
+          - name: WEBUI_PORT
+            value: "80"
+          - name: TORRENTING_PORT
+            value: "6881"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 800m
+              memory: 1024Mi
+            requests:
+              cpu: 400m
+              memory: 512Mi
+          volumeMounts:
+            - mountPath: /media
+              name: data
+            - mountPath: /config-jellyfin
+              name: config
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: jellyfin-data
+        - name: config
+          persistentVolumeClaim:
+            claimName: jellyfin-config
