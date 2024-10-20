@@ -42,7 +42,7 @@ spec:
           volumeMounts:
             - mountPath: /media
               name: data
-            - mountPath: /config-jellyfin
+            - mountPath: /config
               name: config
       volumes:
         - name: data
@@ -50,4 +50,4 @@ spec:
             claimName: jellyfin-data
         - name: config
           persistentVolumeClaim:
-            claimName: jellyfin-config
+            claimName: qbittorrent-config

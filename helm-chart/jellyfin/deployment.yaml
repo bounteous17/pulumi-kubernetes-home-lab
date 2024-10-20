@@ -19,7 +19,7 @@ spec:
         runAsUser: 1000 # Similar to "user: 1000:1000" on Docker
         runAsGroup: 1000
         supplementalGroups:
-          - 122 # Change this to match your "render" host group id and remove this comment
+          - 105 # Change this to match your "render" host group id and remove this comment
       containers:
         - name: jellyfin
           image: jellyfin/jellyfin:2024101405
