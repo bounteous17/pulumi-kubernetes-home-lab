@@ -1,15 +1,25 @@
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
+apiVersion: networking.k8s.io/v1
+kind: Ingress
 metadata:
-  name: nginx-secure
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
+    kubernetes.io/ingress.class: traefik
+  labels:
+    app: nginx
+  name: nginx
 spec:
-  entryPoints:
-    - websecure
-  routes:
-    - match: Host(`nginx.home-lab.begoodguys.ovh`)
-      kind: Rule
-      services:
-        - name: nginx
-          port: 80
+  rules:
+  - host: nginx.home-lab.begoodguys.ovh
+    http:
+      paths:
+      - backend:
+          service:
+            name: nginx
+            port: 
+              number: 80
+        path: /
+        pathType: Prefix
   tls:
-    secretName: home-lab-nginx-cert-production
+  - hosts:
+    - nginx.home-lab.begoodguys.ovh
+    secretName: tls-nginx-http

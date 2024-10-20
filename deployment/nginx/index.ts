@@ -40,7 +40,3 @@ new k8s.core.v1.Service("nginx", {
 new k8s.yaml.ConfigFile("nginx-ingress", {
   file: "deployment/nginx/ingress.yaml",
 });
-
-new k8s.yaml.ConfigFile("nginx-ssl-certificate", {
-  file: "deployment/nginx/ssl-certificate.yaml",
-});
