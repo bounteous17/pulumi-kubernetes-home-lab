@@ -1,15 +1,15 @@
 apiVersion: cert-manager.io/v1
-kind: Issuer
+kind: ClusterIssuer
 metadata:
   name: letsencrypt-production
+  namespace: default
 spec:
   acme:
     email: bounteous17@protonmail.com
     server: https://acme-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
-      name: letsencrypt-issuer-home-lab-production
+      name: letsencrypt-production
     solvers:
       - http01:
           ingress:
-            serviceType: ClusterIP
-            ingressClassName: traefik
+            class: traefik
