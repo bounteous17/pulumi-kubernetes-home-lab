@@ -14,7 +14,7 @@ env:
   IMMICH_MACHINE_LEARNING_URL: '{{ printf "http://%s-machine-learning:3003" .Release.Name }}'
 
 image:
-  tag: v1.119.0
+  tag: v1.119.1
 
 immich:
   metrics:
@@ -62,8 +62,8 @@ postgresql:
           CREATE EXTENSION earthdistance;
           CREATE EXTENSION vectors;
     persistence:
-        enabled: true
-        existingClaim: immich-postgresql
+      enabled: true
+      existingClaim: immich-postgresql
 
 redis:
   enabled: true
@@ -83,18 +83,23 @@ server:
     repository: ghcr.io/immich-app/immich-server
     pullPolicy: IfNotPresent
   controller:
-    replicas: 2
+    replicas: 1
+    strategy: RollingUpdate
   ingress:
     main:
-      enabled: false
+      enabled: true
       annotations:
         # proxy-body-size is set to 0 to remove the body limit on file uploads
-        nginx.ingress.kubernetes.io/proxy-body-size: "0"
+        cert-manager.io/cluster-issuer: letsencrypt-production
+        kubernetes.io/ingress.class: traefik
       hosts:
-        - host: immich.local
+        - host: immich.home-lab.begoodguys.ovh
           paths:
             - path: "/"
-      tls: []
+      tls:
+        - hosts:
+            - immich.home-lab.begoodguys.ovh
+          secretName: tls-immich-http
 
 machine-learning:
   enabled: true

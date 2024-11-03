@@ -19,11 +19,3 @@ const release = new k8s.helm.v3.Release("immich", {
   },
   values,
 });
-
-new k8s.yaml.ConfigFile(
-  "immich-ingress",
-  {
-    file: "helm-chart/immich/ingress.yaml",
-  },
-  { dependsOn: release }
-);
